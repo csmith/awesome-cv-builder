@@ -1,0 +1,34 @@
+= Awesome CV builder
+
+This repo containers a Dockerfile designed to build CVs based on
+https://github.com/posquit0/Awesome-CV[posquit0/Awesome-CV],
+because you probably don't want all those LaTeX dependencies
+cluttering up your machine for an occasional CV edit.
+
+Simply go to the directory with your CV source in, and run:
+
+    docker run -u $UID:$GID --rm -v $PWD:/work csmith/awesome-cv-builder
+
+This will take a `cv.tex` and produce a `cv.pdf`.
+
+== Makefile
+
+You probably won't remember that docker command when you come to
+do another update months in the future, so why not create a Makefile?
+
+[source,Makefile]
+----
+.PHONY: cv
+
+CV_SRCS = $(shell find -name '*.tex')
+
+cv: cv.pdf
+
+cv.pdf: cv.tex $(CV_SRCS)
+	docker run -u $(UID):$(GID) --rm -v $(PWD):/work csmith/awesome-cv-builder
+
+clean:
+	rm -rf *.pdf *.log
+----
+
+Then all you have to do is run `make`.
