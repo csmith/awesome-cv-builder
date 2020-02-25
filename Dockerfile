@@ -11,4 +11,4 @@ RUN apt-get update \
 
 WORKDIR /work
 USER latex
-CMD xelatex cv.tex
+CMD DIR=$(mktemp -d); xelatex -output-directory=$DIR cv.tex; mv $DIR/cv.pdf .; rm -rf $DIR
